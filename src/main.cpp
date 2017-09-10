@@ -250,7 +250,7 @@ int main() {
           	bool left_available = true;
           	bool right_available = true;
           	//set safe distance
-          	double safe_distance = 30.0;
+          	double safe_distance = 40.0;
 
           	//find ref_v to use
 
