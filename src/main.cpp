@@ -257,10 +257,10 @@ int main() {
           	for (int i = 0; i < sensor_fusion.size(); ++i) {
           		float d = sensor_fusion[i][6];
           		double vx = sensor_fusion[i][3];
-          	    double vy = sensor_fusion[i][4];
-          	    double check_speed = sqrt(vx*vx+vy*vy);
+          	  double vy = sensor_fusion[i][4];
+          	  double check_speed = sqrt(vx*vx+vy*vy);
           		double check_car_s = sensor_fusion[i][5];
-				check_car_s += ((double)prev_size*0.02*check_speed);
+				      check_car_s += ((double)prev_size*0.02*check_speed);
           		
 
           		//if car is in our lane
@@ -277,19 +277,19 @@ int main() {
 
           		// prepare for lane change, check availabilities
           		int left_lane = lane - 1;
-				int right_lane = lane + 1;
+				      int right_lane = lane + 1;
 
           		if (left_lane >= 0 && left_available && d < (2+4*left_lane+2) && d > (2+4*left_lane-2)) {
           			if (((check_car_s > car_s) && ((check_car_s-car_s) < safe_distance)) || ((check_car_s < car_s) && ((car_s-check_car_s) < safe_distance))) {
-						left_available = false;
-					}
+						      left_available = false;
+					      }
           		}
 
-				if (right_lane <= 2 && right_available && d < (2+4*right_lane+2) && d > (2+4*right_lane-2)) {
-					if (((check_car_s > car_s) && ((check_car_s-car_s) < safe_distance)) || ((check_car_s < car_s) && ((car_s-check_car_s) < safe_distance))) {
-						right_available = false;
-					}
-				}
+				      if (right_lane <= 2 && right_available && d < (2+4*right_lane+2) && d > (2+4*right_lane-2)) {
+					     if (((check_car_s > car_s) && ((check_car_s-car_s) < safe_distance)) || ((check_car_s < car_s) && ((car_s-check_car_s) < safe_distance))) {
+						      right_available = false;
+					     }
+				      }
           	}
 
 
@@ -297,13 +297,13 @@ int main() {
           		//slow down
           		ref_vel -= 0.224;
 
-				if (lane > 0 && left_available) {
-					lane -= 1;
-					cout << "Change Left!" << endl;
-				} else if (lane < 2 && right_available) {
-					lane += 1;
-					cout << "Change Right!" << endl;
-			}
+				      if (lane > 0 && left_available) {
+					       lane -= 1;
+					       cout << "Change Left!" << endl;
+				      } else if (lane < 2 && right_available) {
+					         lane += 1;
+					         cout << "Change Right!" << endl;
+			        }
 
           	} else if (ref_vel < 49.5) {
           		ref_vel += 0.224;
