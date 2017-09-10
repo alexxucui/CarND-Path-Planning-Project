@@ -59,11 +59,24 @@ the path has processed since last time.
 
 ["sensor_fusion"] A 2d vector of cars and then that car's [car's unique ID, car's x position in map coordinates, car's y position in map coordinates, car's x velocity in m/s, car's y velocity in m/s, car's s position in frenet coordinates, car's d position in frenet coordinates. 
 
-## Details
+## Generating Path Details
 
 1. The car uses a perfect controller and will visit every (x,y) point it recieves in the list every .02 seconds. The units for the (x,y) points are in meters and the spacing of the points determines the speed of the car. The vector going from a point to the next point in the list dictates the angle of the car. Acceleration both in the tangential and normal directions is measured along with the jerk, the rate of change of total Acceleration. The (x,y) point paths that the planner recieves should not have a total acceleration that goes over 10 m/s^2, also the jerk should not go over 50 m/s^3. (NOTE: As this is BETA, these requirements might change. Also currently jerk is over a .02 second interval, it would probably be better to average total acceleration over 1 second and measure jerk from that.
 
 2. There will be some latency between the simulator running and the path planner returning a path, with optimized code usually its not very long maybe just 1-3 time steps. During this delay the simulator will continue using points that it was last given, because of this its a good idea to store the last points you have used so you can have a smooth transition. previous_path_x, and previous_path_y can be helpful for this transition since they show the last points given to the simulator controller with the processed points already removed. You would either return a path that extends this previous path or make sure to create a new path that has a smooth transition with this last path.
+
+
+3. In order to create a smooth tractory, we use spline function to fit the way points. We use a total points of 50 here include the points from the previous cycle to ensure smooth transition and minimuize jerk. At the begining, we also slowly ramp up the speed to avoid sudden change of the acceleration. The choose of N depends on the desired speed here. To facilitate the calcuation and fitting, all points are transformed to car's corrdinates and then transform back to global coordinates before sending to the simulator.
+
+4. To determine the action of the car, we need to use the data from the sensor fusion module. In our main code, we set the safe distance to be 30 m. This actually should depend on the speed in the real world. We first check if there is a car within 30m in front of our car. The car will first speed down and check if left lane or right lane is clear. If within 30m the lane is clear, we flag it to be available and then will move to that lane accordingly.
+
+## Future Improvements
+
+This is a very simple demo and there are many improvements can be made:
+
+1. We can build a finite state machine to move between actions.
+2. Build a cost function to determine whcih action is best. Right now the car is just taking whatever is available.
+
 
 ## Tips
 
